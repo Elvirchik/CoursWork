@@ -20,6 +20,7 @@ import AllOrders from './components/AllOrders';
 import AdminProducts from './components/AdminProducts'; // Импортируем новый компонент
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
+import AdminServices from './components/AdminServices';
 
 
 const App = () => {
@@ -67,6 +68,11 @@ const App = () => {
                     <Route path="/admin/products/edit/:id" element={(
                         <AuthRequired message="Доступ к управлению товарами разрешен только администраторам.">
                             <EditProduct/>
+                        </AuthRequired>
+                    )}/>
+                    <Route path="/admin/services" element={(
+                        <AuthRequired message="Доступ к управлению товарами разрешен только администраторам.">
+                            <AdminServices />
                         </AuthRequired>
                     )}/>
                  </Routes>

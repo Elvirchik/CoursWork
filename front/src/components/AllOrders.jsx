@@ -204,6 +204,11 @@ const AllOrders = () => {
                 <span className='Link'><Link to="/admin" className='Link'>Пользователи</Link></span>
                 <span className='Link_activ'>Заказы</span>
                 <span className='Link'> <Link to="/admin/products" className='Link'>Товары</Link> </span>
+                <span className="Link">
+                          <Link to="/admin/services" className="Link">
+                            Услуги
+                          </Link>
+                        </span>
             </h3>
             <div className="filters">
                 <label>

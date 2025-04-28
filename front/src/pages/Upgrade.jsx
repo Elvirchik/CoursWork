@@ -30,7 +30,7 @@ function Upgrade() {
 
         const fetchServices = async () => {
             try {
-                const response = await fetch("http://localhost:8080/services/getAll");
+                const response = await fetch("http://localhost:8080/services");
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -47,12 +47,12 @@ function Upgrade() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
         if (!userId) {
             setError('User ID не установлен. Пожалуйста, войдите.');
             return;
         }
-
+    
         try {
             const response = await fetch(`http://localhost:8080/service-orders/user/${userId}/service/${selectedServiceId}`, {
                 method: 'POST',
@@ -60,11 +60,11 @@ function Upgrade() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    price: budget,
+                    price: parseFloat(budget), // Преобразуем строку в число
                     comment: comment
                 })
             });
-
+    
             if (response.ok) {
                 console.log('Заявка успешно отправлена!');
                 setBudget('');
@@ -76,14 +76,23 @@ function Upgrade() {
                     setSuccessMessage(null);
                 }, 2000);
             } else {
-                console.error('Ошибка при отправке заявки:', response.status);
-                setError(`Ошибка при отправке заявки: ${response.status}`);
+                // Попытаемся получить более подробную информацию об ошибке
+                try {
+                    const errorData = await response.json();
+                    console.error('Ошибка при отправке заявки:', errorData);
+                    setError(`Ошибка при отправке заявки: ${errorData.message || response.status}`);
+                } catch (jsonError) {
+                    // Если не удается получить JSON с ошибкой, используем статус
+                    console.error('Ошибка при отправке заявки:', response.status);
+                    setError(`Ошибка при отправке заявки: ${response.status}`);
+                }
             }
         } catch (error) {
             console.error('Ошибка сети:', error);
             setError('Ошибка сети');
         }
     };
+    
 
     return (
         <div>

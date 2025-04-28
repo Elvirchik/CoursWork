@@ -76,6 +76,11 @@ const AdminProducts = () => {
                 <span><Link to="/admin" className='Link'>Пользователи</Link></span>
                 <span><Link to="/admin/all/orders" className='Link'>Заказы</Link></span>
                 <span className='Link_activ'>Товары</span>
+                <span className="Link">
+                          <Link to="/admin/services" className="Link">
+                            Услуги
+                          </Link>
+                        </span>
             </h3>
             <div className="admin-actions mb-4">
                 <Link to="/admin/products/add" className="btn btn-success_admin">
