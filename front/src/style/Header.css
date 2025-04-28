@@ -1,0 +1,186 @@
+#basic-navbar-nav {
+  z-index: 100;
+}
+
+
+
+/* Добавьте этот код в ваш Header.css */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23c0ff01' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container input {
+  padding-right: 30px; /* Reserve space for the eye icon */
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #fff;
+}
+
+header {
+    padding: 0 240px;
+    align-items: center;
+    background-color: #191a1b;
+  }
+  .text-cislota
+  {
+    color: #c0ff01;
+  }
+  .imgheader {
+    width: 45px;
+  }
+  .navbar-collapse {
+    z-index: 10; 
+    background-color: #191a1b;
+    
+  }
+  
+  .vhod {
+    background-color: #c0ff01;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 0;
+    margin-bottom: 5px;
+  }
+  
+  .vhodreg{
+    background-color: #c0ff01;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #000;
+  }
+  header .itemi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    flex-direction: row;
+  }
+  header .itemi div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+  header .menu {
+    display: flex;
+    gap: 40px;
+  }
+  header .menu a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+  }
+  header .header_button a {
+    background-color: #c0ff01;
+    padding: 15px 35px;
+    border-radius: 35px;
+    text-decoration: none;
+    color: #000;
+  }
+  header .burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  header .burger-menu span {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: #fff;
+  }
+  header .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #191a1b;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    z-index: 10000;
+  }
+  header .mobile-menu a {
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+    width: 300px;
+    padding: 15px 0;
+    text-align: center;
+    background-color: #202020;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  header .mobile-menu a:last-child {
+    background-color: #c0ff01;
+    color: #000;
+  }
+  @media (max-width: 860px) {
+    header {
+      padding: 0 20px;
+    }
+    header header {
+      height: 100;
+    }
+    header .menu {
+      display: none;
+    }
+    header .header-right {
+      display: none;
+    }
+    header .burger-menu {
+      display: flex;
+    }
+    header .mobile-menu.active {
+      display: flex;
+    }
+    #logoutBtn, #loginBtn{
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media (max-width: 1588px) {
+    header {
+      padding: 0 60px;
+    }
+  }
+  @media (max-width: 1120px) {
+    header {
+      padding: 0 40px;
+    }
+  }
+  @media (max-width: 780px) {
+    header {
+      height: 60px;
+      padding: 0 20px;
+    }
+    header img {
+      width: 160px;
+    }
+  }
+  @media (max-width: 530px) {
+    .mobile-menu a {
+      width: 300px;
+      padding: 10px 0;
+    }
+  }
+  

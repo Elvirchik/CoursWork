@@ -1,0 +1,10 @@
+.panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0s ease-out; /* Добавляем переход */
+  }
+  
+  .panel.active { /* Для активной панели */
+    max-height: 1000px; /* Или auto, если не знаешь максимальную высоту */
+  }
+  
