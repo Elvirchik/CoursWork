@@ -319,6 +319,11 @@ const Admin = () => {
             Услуги
           </Link>
         </span>
+        <span className="Link">
+          <Link to="/admin/service-orders" className="Link">
+            Заявки
+          </Link>
+        </span>
       </h3>
 
       {error && <div className="error-message">{error}</div>}

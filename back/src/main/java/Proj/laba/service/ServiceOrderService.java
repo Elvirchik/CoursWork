@@ -1,7 +1,6 @@
 package Proj.laba.service;
 
 import Proj.laba.dto.ServiceOrderDTO;
-import Proj.laba.dto.ServicesDTO;
 import Proj.laba.mapper.ServiceOrderMapper;
 import Proj.laba.model.ServiceOrder;
 import Proj.laba.model.Services;
@@ -26,7 +25,7 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
     private UserRepository userRepository;
 
     @Autowired
-    private ServicesRepository servicesRepository; // Добавляем прямой доступ к репозиторию услуг
+    private ServicesRepository servicesRepository;
 
     public ServiceOrderService(
             ServiceOrderRepository serviceOrderRepository,
@@ -44,11 +43,9 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
     public ServiceOrderDTO create(ServiceOrderDTO dto) {
         ServiceOrder serviceOrder = new ServiceOrder();
 
-        // Используем userRepository вместо userService.repository
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
-        // Используем servicesRepository вместо доступа через servicesService.repository
         Services service = servicesRepository.findById(dto.getServiceId())
                 .orElseThrow(() -> new RuntimeException("Услуга не найдена"));
 
@@ -65,5 +62,41 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
     public List<ServiceOrderDTO> getAllUserOrders(Long userId) {
         List<ServiceOrder> orders = serviceOrderRepository.findAllByUserId(userId);
         return serviceOrderMapper.toDTOs(orders);
+    }
+
+    // Новый метод - получить все заявки (с фильтрацией неудаленных)
+    public List<ServiceOrderDTO> getAllOrders() {
+        List<ServiceOrder> orders = serviceOrderRepository.findAllByIsDeletedFalse();
+        return serviceOrderMapper.toDTOs(orders);
+    }
+
+    // Новый метод - обновить детали заявки (цену и комментарий)
+    public ServiceOrderDTO updateOrderDetails(ServiceOrderDTO dto) {
+        ServiceOrder order = serviceOrderRepository.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Заявка не найдена"));
+
+        // Обновляем только цену и комментарий
+        if (dto.getPrice() != null) {
+            order.setPrice(dto.getPrice());
+        }
+
+        if (dto.getComment() != null) {
+            order.setComment(dto.getComment());
+        }
+
+        ServiceOrder updatedOrder = serviceOrderRepository.save(order);
+        return serviceOrderMapper.toDTO(updatedOrder);
+    }
+
+    // Мягкое удаление
+    public void softDelete(Long id) {
+        ServiceOrder order = serviceOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Заявка не найдена"));
+
+        order.setDeleted(true);
+        order.setDeletedWhen(LocalDateTime.now());
+        // Можно добавить также order.setDeletedBy(username) если используете систему аудита
+
+        serviceOrderRepository.save(order);
     }
 }

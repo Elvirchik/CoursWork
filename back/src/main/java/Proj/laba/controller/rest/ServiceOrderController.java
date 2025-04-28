@@ -6,6 +6,7 @@ import Proj.laba.model.ServiceOrder;
 import Proj.laba.service.ServiceOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,16 @@ import java.util.List;
 public class ServiceOrderController extends GenericController<ServiceOrder, ServiceOrderDTO> {
 
     private final ServiceOrderService serviceOrderService;
+    private final ServiceOrderMapper serviceOrderMapper;
 
     public ServiceOrderController(ServiceOrderService serviceOrderService, ServiceOrderMapper serviceOrderMapper) {
         super(serviceOrderService, serviceOrderMapper);
         this.serviceOrderService = serviceOrderService;
+        this.serviceOrderMapper = serviceOrderMapper;
     }
 
-    @Operation(description = "Получить все заказы услуг пользователя")
+
+@Operation(description = "Получить все заказы услуг пользователя")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ServiceOrderDTO>> getAllUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(serviceOrderService.getAllUserOrders(userId));
@@ -40,6 +44,32 @@ public class ServiceOrderController extends GenericController<ServiceOrder, Serv
         return ResponseEntity.ok(serviceOrderService.create(orderDTO));
     }
 
+    // Новый метод - получить все заявки (для администратора)
+    @Operation(description = "Получить все заявки на услуги")
+    @GetMapping("/all")
+    public ResponseEntity<List<ServiceOrderDTO>> getAllOrders() {
+        return ResponseEntity.ok(serviceOrderService.getAllOrders());
+    }
+
+    // Новый метод - обновить цену и комментарий в заявке
+    @Operation(description = "Обновить цену и комментарий в заявке")
+    @PutMapping("/{orderId}")
+    public ResponseEntity<ServiceOrderDTO> updateOrder(
+            @PathVariable Long orderId,
+            @RequestBody ServiceOrderDTO orderDTO) {
+        orderDTO.setId(orderId);
+        return ResponseEntity.ok(serviceOrderService.updateOrderDetails(orderDTO));
+    }
+
+    // Мягкое удаление заявки
+    @Operation(description = "Мягкое удаление заявки на услугу")
+    @DeleteMapping("/soft/{id}")
+    public ResponseEntity<Void> softDeleteOrder(@PathVariable Long id) {
+        serviceOrderService.softDelete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // Оставляем метод жесткого удаления для совместимости
     @Operation(description = "Удалить заказ услуги у пользователя")
     @DeleteMapping("/user/{userId}/order/{orderId}")
     public ResponseEntity<Void> deleteUserOrder(

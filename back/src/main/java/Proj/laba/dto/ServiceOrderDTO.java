@@ -19,5 +19,10 @@ public class ServiceOrderDTO extends GenericDTO {
 
     private BigDecimal price;
 
-    private String comment; // Добавляем поле для комментария
+    private String comment;
+
+    // Поля для информации об услуге и пользователе
+    private String serviceName;
+    private String userFirstName;
+    private String userLastName;
 }

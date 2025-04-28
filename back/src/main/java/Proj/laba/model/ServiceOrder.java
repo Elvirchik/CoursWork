@@ -13,19 +13,18 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ServiceOrder extends GenericModel {
 
-    @NotNull(message = "Пользователь должен быть указан")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotNull(message = "Услуга должна быть указана")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_id", nullable = false)
     private Services service;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "comment") // Добавляем поле для комментария
+    @Column(name = "comment")
     private String comment;
+
 }
