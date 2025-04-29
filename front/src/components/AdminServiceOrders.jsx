@@ -340,14 +340,14 @@ const AdminServiceOrders = () => {
                         <>
                           <button
                             onClick={() => startEdit(order)}
-                            className="edit-btn"
+                            className="edit-btn-orders"
                             title="Редактировать"
                           >
                             <FaEdit />
                           </button>
                           <button
                             onClick={() => deleteOrder(order.id)}
-                            className="delete-btn"
+                            className="delete-btn-orders"
                             title="Удалить"
                           >
                             <FaTrash />

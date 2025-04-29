@@ -50,8 +50,8 @@
     justify-content: center;
 }
 
-.edit-btn,
-.delete-btn {
+.edit-btn-orders,
+.delete-btn-orders {
     background: none;
     border: none;
     font-size: 16px;
@@ -59,19 +59,19 @@
     padding: 5px;
 }
 
-.edit-btn {
+.edit-btn-orders {
     color: #4a9af5;
 }
 
-.edit-btn:hover {
+.edit-btn-orders:hover {
     color: #2a7aca;
 }
 
-.delete-btn {
+.delete-btn-orders {
     color: #f54a4a;
 }
 
-.delete-btn:hover {
+.delete-btn-orders:hover {
     color: #ca2a2a;
 }
 
@@ -126,6 +126,6 @@
 }
 
 .active {
-    background-color: #4a9af5;
+    /* background-color: #4a9af5; */
     color: #fff;
 }
