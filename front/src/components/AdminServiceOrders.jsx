@@ -1,10 +1,9 @@
-// src/components/AdminServiceOrders.jsx
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import LoadingIndicator from "./LoadingIndicator";
 import ReactPaginate from "react-paginate";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit, FaFilter, FaTimes } from "react-icons/fa";
 import "../style/AdminServiceOrders.css";
 import { Link } from "react-router-dom";
 
@@ -13,6 +12,7 @@ const AdminServiceOrders = () => {
   const [serviceOrders, setServiceOrders] = useState([]);
   const [users, setUsers] = useState({}); // Store user data by ID
   const [services, setServices] = useState({}); // Store service data by ID
+  const [servicesArray, setServicesArray] = useState([]); // Array for dropdown
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -23,6 +23,13 @@ const AdminServiceOrders = () => {
     price: "",
     comment: "",
   });
+  
+  // Фильтры
+  const [firstNameFilter, setFirstNameFilter] = useState("");
+  const [lastNameFilter, setLastNameFilter] = useState("");
+  const [serviceFilter, setServiceFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   // Load user and service data
   const fetchUserAndServiceData = async () => {
@@ -42,9 +49,7 @@ const AdminServiceOrders = () => {
         throw new Error("Ошибка при загрузке пользователей");
       }
 
-      const usersData = (await usersResponse.ok)
-        ? await usersResponse.json()
-        : { content: [] };
+      const usersData = await usersResponse.json();
       const usersMap = {};
       usersData.content.forEach((user) => {
         usersMap[user.id] = user;
@@ -64,6 +69,8 @@ const AdminServiceOrders = () => {
       }
 
       const servicesData = await servicesResponse.json();
+      setServicesArray(servicesData); // Сохраняем массив для выпадающего списка
+      
       const servicesMap = {};
       servicesData.forEach((service) => {
         servicesMap[service.id] = service;
@@ -75,16 +82,33 @@ const AdminServiceOrders = () => {
     }
   };
 
-  // Загрузка всех заявок на услуги
+  // Загрузка всех заявок на услуги с фильтрами
   const fetchServiceOrders = async () => {
     try {
       setLoading(true);
 
-      // First load users and services data
-      await fetchUserAndServiceData();
+      // First load users and services data if not loaded yet
+      if (Object.keys(users).length === 0 || Object.keys(services).length === 0) {
+        await fetchUserAndServiceData();
+      }
 
-      // Then load service orders
-      const response = await fetch("http://localhost:8080/service-orders/all", {
+      // Построение URL с параметрами фильтрации - используем новый endpoint all-simple
+      let url = "http://localhost:8080/service-orders/all-simple";
+      const params = [];
+      
+      if (firstNameFilter) params.push(`firstName=${encodeURIComponent(firstNameFilter)}`);
+      if (lastNameFilter) params.push(`lastName=${encodeURIComponent(lastNameFilter)}`);
+      if (serviceFilter) params.push(`serviceId=${serviceFilter}`);
+      if (dateFilter) params.push(`createdDate=${encodeURIComponent(dateFilter)}`);
+      params.push(`page=${currentPage}`);
+      params.push(`size=${itemsPerPage}`);
+      
+      if (params.length > 0) {
+        url += "?" + params.join("&");
+      }
+
+      // Then load service orders with filters
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${cookies.jwtToken}`,
           "Content-Type": "application/json",
@@ -96,8 +120,11 @@ const AdminServiceOrders = () => {
       }
 
       const data = await response.json();
-      setServiceOrders(data);
-      setPageCount(Math.ceil(data.length / itemsPerPage));
+      
+      // Получаем данные с пагинацией из ответа
+      setServiceOrders(data.content);
+      setPageCount(data.totalPages);
+      
       setLoading(false);
     } catch (error) {
       console.error("Ошибка при загрузке заявок на услуги:", error);
@@ -106,12 +133,19 @@ const AdminServiceOrders = () => {
     }
   };
 
+  // Вызываем загрузку заявок при изменении фильтров или страницы
+  useEffect(() => {
+    if (cookies.jwtToken) {
+      fetchServiceOrders();
+    }
+  }, [currentPage, firstNameFilter, lastNameFilter, serviceFilter, dateFilter]);
+
   useEffect(() => {
     if (cookies.jwtToken) {
       try {
         const decodedToken = jwtDecode(cookies.jwtToken);
         if (decodedToken.role === "ADMIN") {
-          fetchServiceOrders();
+          fetchUserAndServiceData();
         } else {
           setError("Доступ разрешен только администраторам");
           setLoading(false);
@@ -140,15 +174,18 @@ const AdminServiceOrders = () => {
     return service ? service.serviceName : `ID: ${serviceId}`;
   };
 
+  // Очистка всех фильтров
+  const clearFilters = () => {
+    setFirstNameFilter("");
+    setLastNameFilter("");
+    setServiceFilter("");
+    setDateFilter("");
+    setCurrentPage(0);
+  };
+
   // Изменение страницы пагинации
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
-  };
-
-  // Расчет текущей страницы для отображения
-  const getCurrentItems = () => {
-    const offset = currentPage * itemsPerPage;
-    return serviceOrders.slice(offset, offset + itemsPerPage);
   };
 
   // Начать редактирование заявки
@@ -233,7 +270,14 @@ const AdminServiceOrders = () => {
     }));
   };
 
-  if (loading) {
+  // Применение фильтров
+  const applyFilters = (e) => {
+    e.preventDefault();
+    setCurrentPage(0); // Сбрасываем на первую страницу при применении фильтров
+    fetchServiceOrders();
+  };
+
+  if (loading && Object.keys(services).length === 0) {
     return <LoadingIndicator />;
   }
 
@@ -245,11 +289,9 @@ const AdminServiceOrders = () => {
     <section className="container admin-service-orders">
       <h3 className="admin_button">
         <span className="Link">
-        
-            <Link to="/admin" className="Link">
-              Пользователи
-            </Link>
-          
+          <Link to="/admin" className="Link">
+            Пользователи
+          </Link>
         </span>
         <span className="Link">
           <Link to="/admin/all/orders" className="Link">
@@ -270,8 +312,85 @@ const AdminServiceOrders = () => {
       </h3>
 
       <h2>Управление заявками на услуги</h2>
+      
+      {/* Кнопка для отображения/скрытия фильтров */}
+      <div className="filter-toggle">
+        <button 
+          onClick={() => setShowFilters(!showFilters)} 
+          className="btn btn-filter"
+        >
+          <FaFilter /> {showFilters ? 'Скрыть фильтры' : 'Показать фильтры'}
+        </button>
+      </div>
+      
+      {/* Фильтры */}
+      {showFilters && (
+        <div className="filters-panel">
+          <form onSubmit={applyFilters} className="filters-form">
+            <div className="filter-group">
+              <label>Имя:</label>
+              <input
+                type="text"
+                value={firstNameFilter}
+                onChange={(e) => setFirstNameFilter(e.target.value)}
+                placeholder="Имя пользователя"
+                className="filter-input"
+              />
+            </div>
+            
+            <div className="filter-group">
+              <label>Фамилия:</label>
+              <input
+                type="text"
+                value={lastNameFilter}
+                onChange={(e) => setLastNameFilter(e.target.value)}
+                placeholder="Фамилия пользователя"
+                className="filter-input"
+              />
+            </div>
+            
+            <div className="filter-group">
+              <label>Услуга:</label>
+              <select
+                value={serviceFilter}
+                onChange={(e) => setServiceFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">Все услуги</option>
+                {servicesArray.map(service => (
+                  <option key={service.id} value={service.id}>
+                    {service.serviceName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="filter-group">
+              <label>Дата создания:</label>
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="filter-input"
+              />
+            </div>
+            
+            <div className="filter-actions">
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="btn btn-secondary"
+              >
+                <FaTimes /> Очистить
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
-      {serviceOrders.length === 0 ? (
+      {loading ? (
+        <LoadingIndicator />
+      ) : serviceOrders.length === 0 ? (
         <div className="no-orders">Заявки на услуги отсутствуют</div>
       ) : (
         <>
@@ -289,7 +408,7 @@ const AdminServiceOrders = () => {
                 </tr>
               </thead>
               <tbody>
-                {getCurrentItems().map((order) => (
+                {serviceOrders.map((order) => (
                   <tr key={order.id} className="service-order-row">
                     <td>{order.id}</td>
                     <td>{getUserInfo(order.userId)}</td>
@@ -307,7 +426,7 @@ const AdminServiceOrders = () => {
                         `${order.price} ₽`
                       )}
                     </td>
-                    <td>
+                    <td className="comment-cell">
                       {editOrderId === order.id ? (
                         <textarea
                           name="comment"
@@ -316,7 +435,9 @@ const AdminServiceOrders = () => {
                           className="edit-textarea"
                         />
                       ) : (
-                        order.comment || "Нет комментария"
+                        <div className="comment-content">
+                          {order.comment || "Нет комментария"}
+                        </div>
                       )}
                     </td>
                     <td>{new Date(order.createdWhen).toLocaleString()}</td>
@@ -344,6 +465,7 @@ const AdminServiceOrders = () => {
                             title="Редактировать"
                           >
                             <FaEdit />
+                            <span>Редактировать</span> 
                           </button>
                           <button
                             onClick={() => deleteOrder(order.id)}
@@ -351,6 +473,7 @@ const AdminServiceOrders = () => {
                             title="Удалить"
                           >
                             <FaTrash />
+                            <span>Удалить</span>
                           </button>
                         </>
                       )}

@@ -44,10 +44,11 @@
     vertical-align: middle;
 }
 
-.action-buttons {
+.action-buttons button {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin: 2px;
 }
 
 .edit-btn-orders,
@@ -129,3 +130,135 @@
     /* background-color: #4a9af5; */
     color: #fff;
 }
+.comment-cell {
+    max-width: 250px;
+    min-width: 150px;
+  }
+  
+  .comment-content {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    max-height: none;
+  }
+  
+  .edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  /* фильтры */
+  /* Стили для фильтров */
+.filters-panel {
+    background-color: #111;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+  }
+  
+  .filter-group {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-group option {
+    background-color: #111;
+    border: 1px solid #c0ff01;
+    color: #fff;
+  }
+
+  .filter-group select {
+    background-color: #111;
+    color: #fff;
+  }
+  
+  .filter-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .filter-input, .filter-select {
+    padding: 8px;
+    border: 1px solid #c0ff01;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .btn-filter {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-filter:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .filter-toggle {
+    margin-bottom: 15px;
+  }
+  
+  .btn-primary {
+    background-color: #c0ff01;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-secondary {
+    background-color: #c0ff01;
+    color: #111;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  @media (max-width: 768px) {
+    .filters-form {
+      flex-direction: column;
+    }
+    
+    .filter-group {
+      width: 100%;
+    }
+  }
+  

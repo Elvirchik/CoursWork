@@ -8,9 +8,14 @@ import Proj.laba.model.User;
 import Proj.laba.reposirory.ServiceOrderRepository;
 import Proj.laba.reposirory.ServicesRepository;
 import Proj.laba.reposirory.UserRepository;
+import jakarta.persistence.criteria.Join;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -99,4 +104,45 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
 
         serviceOrderRepository.save(order);
     }
+    public Page<ServiceOrderDTO> getAllOrdersWithFilters(
+            String firstName, String lastName, Long serviceId, LocalDate createdDate, Pageable pageable) {
+
+        // Создаем спецификации для фильтрации
+        Specification<ServiceOrder> spec = Specification.where(null);
+
+        if (firstName != null && !firstName.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<ServiceOrder, User> userJoin = root.join("user");
+                return cb.like(cb.lower(userJoin.get("firstName")), "%" + firstName.toLowerCase() + "%");
+            });
+        }
+
+        if (lastName != null && !lastName.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<ServiceOrder, User> userJoin = root.join("user");
+                return cb.like(cb.lower(userJoin.get("lastName")), "%" + lastName.toLowerCase() + "%");
+            });
+        }
+
+        if (serviceId != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("service").get("id"), serviceId));
+        }
+
+        if (createdDate != null) {
+            spec = spec.and((root, query, cb) -> {
+                // Преобразуем LocalDate в LocalDateTime
+                LocalDateTime startOfDay = createdDate.atStartOfDay();
+                LocalDateTime endOfDay = createdDate.atTime(23, 59, 59);
+                return cb.between(root.get("createdWhen"), startOfDay, endOfDay);
+            });
+        }
+
+        // Добавляем фильтр, чтобы исключить мягко удаленные записи
+        spec = spec.and((root, query, cb) -> cb.isNull(root.get("deletedWhen")));
+
+        Page<ServiceOrder> orderPage = serviceOrderRepository.findAll(spec, pageable);
+        return orderPage.map(serviceOrderMapper::toDTO);
+    }
+
 }

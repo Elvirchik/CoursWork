@@ -6,10 +6,15 @@ import Proj.laba.model.ServiceOrder;
 import Proj.laba.service.ServiceOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -78,4 +83,19 @@ public class ServiceOrderController extends GenericController<ServiceOrder, Serv
         serviceOrderService.delete(orderId);
         return ResponseEntity.ok().build();
     }
+    // Модифицированный метод getAllOrders с поддержкой фильтрации
+    @Operation(description = "Получить все заявки на услуги с фильтрацией")
+    @GetMapping("/all-simple")
+    public ResponseEntity<Page<ServiceOrderDTO>> getAllOrdersSimple(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) Long serviceId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdDate,
+            @PageableDefault(size = 10) Pageable pageable) {
+
+        Page<ServiceOrderDTO> orders = serviceOrderService.getAllOrdersWithFilters(
+                firstName, lastName, serviceId, createdDate, pageable);
+        return ResponseEntity.ok(orders);
+    }
+
 }
