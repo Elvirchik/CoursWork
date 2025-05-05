@@ -1,0 +1,49 @@
+.success-notification {
+    position: fixed;
+    top: 20px; /* Position at the top */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Прозрачный тёмный цвет */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 16px; /* Уменьшаем размер текста */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    animation: fadeInOut 1.5s forwards;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .error-notification {
+    position: fixed;
+    top: 20px; /* Position at the top */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.7); /* Semi-transparent red */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 16px; /* Уменьшаем размер текста */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    animation: fadeInOut 1.5s forwards;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  

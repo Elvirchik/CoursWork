@@ -1,0 +1,291 @@
+.delete-confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete-confirmation-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.delete-confirmation-content h4 {
+    margin-top: 0;
+    color: #333;
+}
+
+.confirmation-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.confirm-delete-btn {
+    background-color: #c50505;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-delete-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.confirm-delete-btn:hover {
+    background-color: #c50505;
+}
+
+.cancel-delete-btn:hover {
+    background-color: #5a6268;
+}
+
+
+
+.search-panel {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background-color: #111;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-field label {
+    font-weight: 500;
+    width: 100px;
+  }
+  
+  .search-field input, 
+  .search-field select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #c0ff01;
+    background-color: #111;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 40px;
+  }
+  
+  
+  .search-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+  
+  .clear-button {
+    background-color: #c50505;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .clear-button:hover {
+    background-color: #c50505;
+  }
+  
+  @media (max-width: 768px) {
+    .search-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .search-field {
+      width: 100%;
+    }
+  }
+  
+
+.admin_button {
+    display: flex;
+    gap: 10px;
+}
+
+.admin_button span {
+    background-color: #111;
+    border: 1px solid #c0ff01;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #111;
+}
+
+.admin_button .Link {
+    background-color: #111;
+    color: #fff;
+}
+
+.admin_button .Link_activ {
+    background-color: #c0ff01;
+}
+
+.admin_button .Link_activ .Link {
+    color: #fff;
+}
+
+#admin {
+    margin: 60px 240px;
+    padding: 60px;
+    background-color: rgba(32, 32, 32, 0.4745098039);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#admin a {
+    text-align: center;
+    text-decoration: none;
+}
+
+#admin h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#admin div .txt_admin {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#admin div .txt_admin div {
+    display: flex;
+    gap: 10px;
+    text-transform: uppercase;
+}
+
+#admin div .txt_admin div select {
+    width: 100%;
+    border-radius: 20px;
+    background-color: #202020;
+    border: 1px solid #c0ff01;
+    color: #fff;
+    padding-left: 15px;
+}
+
+.show_order_admin {
+    background-color: #c0ff01;
+    border: none;
+    color: #111;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-transform: none;
+    font-weight: normal;
+}
+
+#admin div .txt_admin .not_upper {
+    text-transform: none;
+}
+
+#admin div .txt_admin div:last-child {
+    color: #c0ff01;
+}
+
+/* Стили для пагинации */
+.pagination {
+    display: flex;
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.pagination li a {
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #c0ff01; /* Основной цвет текста */
+    border: 1px solid #c0ff01; /* Цвет рамки */
+    background-color: #111; /* Цвет фона */
+    cursor: pointer;
+    margin: 0 5px; /* Отступы между элементами */
+}
+
+.pagination a:hover {
+    background-color: #c0ff01; /* Цвет фона при наведении */
+    color: #111; /* Цвет текста при наведении */
+}
+
+.pagination li.active a {
+    background-color: #c0ff01; /* Цвет фона активной страницы */
+    color: #111; /* Цвет текста активной страницы */
+    border: 1px solid #c0ff01;
+}
+
+.pagination li.disabled a {
+    color: #666;
+    border-color: #666;
+    cursor: not-allowed;
+}
+
+.pagination li.break-me a {
+    border: none;
+    color: #c0ff01; /* Цвет для элемента break */
+}
+/* Конец стилей для пагинации */
+
+@media (max-width: 1700px) {
+    #admin {
+        margin: 20px 60px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 1300px) {
+    #admin {
+        margin: 20px;
+    }
+}
+
+@media (max-width: 1000px) {
+    #admin .one_zakaz {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 610px) {
+    #admin {
+        padding: 0;
+        margin: 10px;
+    }
+}
+
+
+

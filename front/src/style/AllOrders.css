@@ -1,0 +1,275 @@
+/* Delete confirmation dialog */
+.delete-confirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete-confirmation-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.delete-confirmation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.confirm-button, .cancel-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.confirm-button {
+    background-color: #c50505;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.clear-filters-button {
+    background-color: #c50505;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.clear-filters-button:hover {
+    background-color: #c50505;
+}
+
+
+#admin .filters {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: start;
+}
+
+.delete_orders_admin {
+    position: absolute;
+    right: 40px;
+}
+
+#admin .filters label {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+#admin .filters label select,
+input {
+    width: 181px;
+    height: 29px;
+    border: 1px solid #c0ff01;
+    background-color: #111;
+    color: #fff;
+    border-radius: 3px;
+}
+
+#admin .txt_admin button {
+    background-color: #c0ff01;
+    border: none;
+    color: #111;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#admin .txt_admin .button {
+    background-color: #c0ff01;
+    border: none;
+    color: #111;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#admin .one_zakaz {
+    border: 1px solid #c0ff01;
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: space-between;
+    position: relative;
+}
+
+#admin .one_zakaz .carti_tovarov {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Стили для пагинации */
+.pagination {
+    display: flex;
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.pagination li a {
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #c0ff01; /* Основной цвет текста */
+    border: 1px solid #c0ff01; /* Цвет рамки */
+    background-color: #111; /* Цвет фона */
+    cursor: pointer;
+    margin: 0 5px; /* Отступы между элементами */
+}
+
+.pagination a:hover {
+    background-color: #c0ff01; /* Цвет фона при наведении */
+    color: #111; /* Цвет текста при наведении */
+}
+
+.pagination li {
+    color: #fff;
+}
+
+.pagination li:hover {
+    color: #111;
+}
+
+.pagination li.active a {
+    background-color: #c0ff01; /* Цвет фона активной страницы */
+    color: #111; /* Цвет текста активной страницы */
+    border: 1px solid #c0ff01;
+}
+
+.pagination li.disabled a {
+    color: #666;
+    border-color: #666;
+    cursor: not-allowed;
+}
+
+.pagination li.break-me a {
+    border: none;
+    color: #c0ff01; /* Цвет для элемента break */
+}
+/* Конец стилей для пагинации */
+
+@media (max-width: 1065px) {
+    #admin .filters {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 660px) {
+    #admin .filters {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+    }
+
+    #admin .one_zakaz {
+        border-radius: 5px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 430px) {
+    #admin .filters {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 1700px) {
+
+    #admin .one_zakaz .carti_tovarov {
+        justify-items: center;
+    }
+}
+
+@media (max-width: 1300px) {
+    #admin .one_zakaz .carti_tovarov {
+        justify-items: center;
+    }
+}
+
+@media (max-width: 1210px) {
+    #admin .one_zakaz {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .delete_orders_admin {
+        right: 20px;
+    }
+
+    #admin .one_zakaz .carti_tovarov {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 835px) {
+    #admin .one_zakaz .carti_tovarov {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 610px) {
+    #admin .one_zakaz .carti_tovarov {
+        gap: 10px;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 610px) {
+
+    #admin .one_zakaz {
+        padding: 5px;
+    }
+    .delete_orders_admin {
+        right: 5px;
+    }
+    #admin .one_zakaz .carti_tovarov {
+        gap: 10px;
+        grid-template-columns: 1fr;
+    }
+
+    .name_price_bue img {
+        width: 100px;
+    }
+}

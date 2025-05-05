@@ -1,0 +1,20 @@
+/* src/style/SortingBar.css */
+.sorting-bar {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 1px solid #c0ff01;
+    border-radius: 5px;
+    color: #fff;
+  }
+
+  .sorting-bar__item {
+    margin-bottom: 1rem;
+    background-color: #111;
+  }
+  
+  .sorting-bar__item label {
+    margin-bottom: 0.5rem;
+    background-color: #111;
+  }
+  
