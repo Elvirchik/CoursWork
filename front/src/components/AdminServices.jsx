@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import LoadingIndicator from "./LoadingIndicator";
+import "../style/AdminServices.css"
 import axios from "axios";
+import { FaTrash} from "react-icons/fa";
+
 
 const AdminServices = () => {
   const [cookies] = useCookies(["jwtToken"]);
@@ -168,9 +171,10 @@ const AdminServices = () => {
                   <td>
                     <button
                       onClick={() => handleDelete(service.id)}
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger btn-sm btn_delete_orders"
                     >
-                      Удалить
+                      <FaTrash />
+                      <span>Удалить</span>
                     </button>
                   </td>
                 </tr>

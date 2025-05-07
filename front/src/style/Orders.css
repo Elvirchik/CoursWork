@@ -16,6 +16,7 @@
   background-color: #202020;
   color: #fff;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .order-status-tabs button.active {
@@ -23,162 +24,284 @@
   color: #111;
 }
 
-
 .order {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #fff;
 }
+
 .two_user .txt1, .txt2 {
-    margin: 0px 10px;
-    font-size: 20px;
+  margin: 0px 10px;
+  font-size: 20px;
 }
+
 .two_user {
-    border: 1px solid #c0ff01;
-    border-radius: 5px;
-    padding: 10px 0;
+  border: 1px solid #c0ff01;
+  border-radius: 5px;
+  padding: 10px 0;
 }
+
 .two_user .txt2 strong {
   padding-bottom: 10px;
 }
+
+/* Стили сетки товаров */
 .tovari_orders {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
-  place-items: center;
-  padding-bottom: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(345px, 1fr));
+  gap: 20px;
+  padding: 0;
+  justify-items: center;
+  margin: 0;
+  width: 100%;
 }
+
+/* Стили карточки товара */
 .card_tovara_orders {
-  gap: 10px;
+  gap: 15px;
   border: 1px solid #c0ff01;
   width: 345px;
   border-radius: 20px;
-  padding: 0 20px;
+  padding: 0 20px 15px;
   display: flex;
   flex-direction: column;
-  padding-bottom: 15px;
+  background-color: #1a1a1a;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.card_tovara_orders:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card_tovara_orders img {
+  width: 100%;
+  max-width: 305px;
+  height: auto;
+  margin: 15px auto;
+  object-fit: contain;
+}
+
+.card_tovara_orders .name_price_bue {
+  color: #fff;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.fs-10 {
+  font-size: 20px;
+}
+
+.card_tovara_orders .name_price_bue h4 {
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card_tovara_orders .name_price_bue div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #c0ff01;
+  margin-top: 10px;
+}
+
+.card_tovara_orders .name_price_bue div button {
+  background: none;
+  border: 1px solid #c0ff01;
+  padding: 8px 15px;
+  color: #c0ff01;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card_tovara_orders .name_price_bue div button:hover {
+  background-color: #c0ff01;
+  color: #000;
+}
+
 .card_tovara_orders .button_card {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 20px;
 }
+
 .card_tovara_orders .button_card button {
   width: 100%;
 }
+
 .card_tovara_orders .button_card button:first-child {
   border: 1px solid #e70000;
   color: #e70000;
 }
+
 .card_tovara_orders .button_card button:first-child::before {
   background-color: #e70000;
 }
+
 .card_tovara_orders .button_card button:first-child:hover {
   color: #111;
 }
-.card_tovara_orders .name_price_bue {
-  color: #fff;
-  font-size: 25px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.fs-10 {
-  font-size: 20px;
-}
-.card_tovara_orders .name_price_bue div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  color: #c0ff01;
-}
-.card_tovara_orders .name_price_bue div button {
-  background: none;
-  border: 1px solid #c0ff01;
-  padding: 5px 20px;
-  color: #c0ff01;
-  border-radius: 20px;
-  font-size: 18px;
-  color: #c0ff01;
-}
+
 .card_tovara_orders .open_conf {
   display: none;
   background-color: #111;
   border: none;
 }
+
 .card_tovara_orders .open_conf img {
   width: 60px;
 }
-.card_tovara_orders img {
-  width: 305px;
-}
+
+/* Стили блока конфигурации */
 .card_tovara_orders .konfi {
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
+  margin-top: 10px;
 }
+
 .card_tovara_orders .konfi .konfiguration {
-  border-radius: 20px;
-  font-size: 16px;
-  width: 305px;
+  border-radius: 15px;
+  width: 100%;
   height: 55px;
   display: flex;
   background-color: #202020;
   color: #fff;
   align-items: center;
-  gap: 25px;
+  gap: 15px;
+  padding-right: 10px;
 }
+
+.card_tovara_orders .konfi .konfiguration div {
+  flex: 1;
+  overflow: hidden;
+}
+
 .card_tovara_orders .konfi .konfiguration div div:first-child {
   color: #9B9B9B;
+  font-size: 12px;
 }
+
+.card_tovara_orders .konfi .konfiguration div div:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
 .card_tovara_orders .konfi .konfiguration img {
-  width: 50px;
-  height: 50px;
-  margin-left: 20px;
+  filter: brightness(0) invert(1);
+  width: 40px;
+  height: 40px;
+  margin: 0 0 0 10px;
+  padding: 0;
 }
 
-
+/* Адаптивные стили */
 @media (max-width: 1200px) {
-  .tovari_orders{
-    grid-template-columns: 1fr 1fr;
+  .tovari_orders {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .tovari_orders {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
   
-}
-@media (max-width:992px) {
-  .tovari_orders {
-    grid-template-columns: 1fr;
-  }
   .txt2 {
     margin: 0px;
   }
+  
   .txt2 strong {
     margin: 10px;
   }
 }
-@media (max-width:400px) {
+
+@media (max-width: 768px) {
+  .tovari_orders {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    margin: 0;
+  }
+  
   .card_tovara_orders {
-    padding: 0;
-    width: 300px;
+    width: 100%;
+    max-width: 320px;
   }
+}
+
+@media (max-width: 576px) {
+  .card_tovara_orders {
+    padding: 0 15px 15px;
+    max-width: 100%;
+  }
+  
+  .card_tovara_orders .name_price_bue {
+    font-size: 18px;
+  }
+  
+  .card_tovara_orders .name_price_bue div button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  
   .card_tovara_orders .konfi .konfiguration {
-    gap: 15px;
-    width: 290px;
+    height: 50px;
   }
+  
+  .card_tovara_orders .konfi .konfiguration div div:last-child {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .card_tovara_orders {
+    padding: 0 10px 10px;
+    gap: 10px;
+    border-radius: 15px;
+    width: 95%;
+  }
+  
+  .card_tovara_orders .konfi .konfiguration {
+    gap: 10px;
+    height: 45px;
+  }
+  
   .card_tovara_orders .konfi .konfiguration img {
-    width: 40px;
-    height: 40px;
-    margin-left: 15px;
+    width: 35px;
+    height: 35px;
+    margin-left: 8px;
   }
+  
+  .card_tovara_orders .name_price_bue {
+    font-size: 16px;
+  }
+  
+  .card_tovara_orders .name_price_bue div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card_tovara_orders .name_price_bue div button {
+    width: 100%;
+    margin-top: 5px;
+  }
+  
   .txt2 {
     font-size: 15px;
   }
+  
   .card_tovara_orders .konfi {
     align-items: center;
-  }
-  .card_tovara_orders .name_price_bue {
-    padding: 0 10px;
   }
 }

@@ -11,11 +11,13 @@ import Proj.laba.model.Role;
 import Proj.laba.model.User;
 import Proj.laba.reposirory.OrderRepository;
 import Proj.laba.reposirory.UserRepository;
+import jakarta.persistence.criteria.Join;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -145,4 +147,39 @@ public class UserService extends GenericService<User, UserDTO> {
 
         return mapper.toDTO(userRepository.save(existingUser));
     }
+
+    public Page<UserDTO> listAllWithFilters(String firstName, String lastName, String email, String phone, String roleTitle, Pageable pageable) {
+        Specification<User> spec = Specification.where(null);
+
+        if (firstName != null && !firstName.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + firstName.toLowerCase() + "%"));
+        }
+
+        if (lastName != null && !lastName.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")), "%" + lastName.toLowerCase() + "%"));
+        }
+
+        if (email != null && !email.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
+        }
+
+        if (phone != null && !phone.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(root.get("phone"), "%" + phone + "%"));
+        }
+
+        if (roleTitle != null && !roleTitle.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) -> {
+                Join<User, Role> roleJoin = root.join("role");
+                return criteriaBuilder.equal(roleJoin.get("title"), roleTitle);
+            });
+        }
+
+        Page<User> userPage = userRepository.findAll(spec, pageable);
+        return userPage.map(mapper::toDTO);
+    }
+
 }

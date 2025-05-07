@@ -22,13 +22,26 @@ const AdminServiceOrders = () => {
   const [editedOrder, setEditedOrder] = useState({
     price: "",
     comment: "",
+    status: ""
   });
+  
+  // Статусы заказов
+  const [statuses] = useState([
+    "В обработке",
+    "Доставляется к рабочим",
+    "Выполняется",
+    "Завершен апгрейд",
+    "Доставляется к заказчику",
+    "Завершён",
+    "Отклонён"
+  ]);
   
   // Фильтры
   const [firstNameFilter, setFirstNameFilter] = useState("");
   const [lastNameFilter, setLastNameFilter] = useState("");
   const [serviceFilter, setServiceFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState(""); // Добавлен фильтр по статусу
   const [showFilters, setShowFilters] = useState(false);
 
   // Load user and service data
@@ -100,6 +113,7 @@ const AdminServiceOrders = () => {
       if (lastNameFilter) params.push(`lastName=${encodeURIComponent(lastNameFilter)}`);
       if (serviceFilter) params.push(`serviceId=${serviceFilter}`);
       if (dateFilter) params.push(`createdDate=${encodeURIComponent(dateFilter)}`);
+      if (statusFilter) params.push(`status=${encodeURIComponent(statusFilter)}`); // Добавлен фильтр по статусу
       params.push(`page=${currentPage}`);
       params.push(`size=${itemsPerPage}`);
       
@@ -138,7 +152,7 @@ const AdminServiceOrders = () => {
     if (cookies.jwtToken) {
       fetchServiceOrders();
     }
-  }, [currentPage, firstNameFilter, lastNameFilter, serviceFilter, dateFilter]);
+  }, [currentPage, firstNameFilter, lastNameFilter, serviceFilter, dateFilter, statusFilter]);
 
   useEffect(() => {
     if (cookies.jwtToken) {
@@ -180,6 +194,7 @@ const AdminServiceOrders = () => {
     setLastNameFilter("");
     setServiceFilter("");
     setDateFilter("");
+    setStatusFilter(""); // Очистка фильтра статуса
     setCurrentPage(0);
   };
 
@@ -194,6 +209,7 @@ const AdminServiceOrders = () => {
     setEditedOrder({
       price: order.price,
       comment: order.comment,
+      status: order.status || "новая"
     });
   };
 
@@ -203,6 +219,7 @@ const AdminServiceOrders = () => {
     setEditedOrder({
       price: "",
       comment: "",
+      status: ""
     });
   };
 
@@ -230,6 +247,36 @@ const AdminServiceOrders = () => {
       setEditOrderId(null);
     } catch (error) {
       console.error("Ошибка при обновлении заявки:", error);
+      setError(error.message);
+    }
+  };
+
+  // Обновление только статуса заказа
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/service-orders/${orderId}/status?status=${encodeURIComponent(newStatus)}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${cookies.jwtToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Не удалось обновить статус заявки");
+      }
+
+      // Обновляем список заявок
+      setServiceOrders(
+        serviceOrders.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (error) {
+      console.error("Ошибка при обновлении статуса заявки:", error);
       setError(error.message);
     }
   };
@@ -365,6 +412,23 @@ const AdminServiceOrders = () => {
               </select>
             </div>
             
+            {/* Фильтр по статусу */}
+            <div className="filter-group">
+              <label>Статус:</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">Все статусы</option>
+                {statuses.map(status => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
             <div className="filter-group">
               <label>Дата создания:</label>
               <input
@@ -402,6 +466,7 @@ const AdminServiceOrders = () => {
                   <th>Пользователь</th>
                   <th>Услуга</th>
                   <th>Цена</th>
+                  <th>Статус</th>
                   <th>Комментарий</th>
                   <th>Дата создания</th>
                   <th>Действия</th>
@@ -424,6 +489,34 @@ const AdminServiceOrders = () => {
                         />
                       ) : (
                         `${order.price} ₽`
+                      )}
+                    </td>
+                    <td>
+                      {editOrderId === order.id ? (
+                        <select
+                          name="status"
+                          value={editedOrder.status}
+                          onChange={handleInputChange}
+                          className="edit-select"
+                        >
+                          {statuses.map(status => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <select
+                          className="status-badge status-select"
+                          value={order.status || "новая"}
+                          onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        >
+                          {statuses.map(status => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
                       )}
                     </td>
                     <td className="comment-cell">
@@ -497,7 +590,7 @@ const AdminServiceOrders = () => {
               pageLinkClassName="page-num"
               previousLinkClassName="page-num"
               nextLinkClassName="page-num"
-              activeLinkClassName="active"
+              activeLinkClassName="active_orders"
             />
           )}
         </>

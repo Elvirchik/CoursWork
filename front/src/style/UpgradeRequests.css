@@ -1,0 +1,123 @@
+/* src/style/UpgradeRequests.css */
+.upgrade-requests-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgba(32, 32, 32, 0.4745098039);
+    border-radius: 20px;
+    color: #fff;
+}
+
+.upgrade-requests-container h2 {
+    color: #c0ff01;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid #c0ff01;
+    padding-bottom: 10px;
+}
+
+.upgrade-requests-list {
+    display: grid;
+    gap: 20px;
+}
+
+.upgrade-request-card {
+    background-color: #202020;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+    border: 1px solid rgba(192, 255, 1, 0.3);
+}
+
+.upgrade-request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(192, 255, 1, 0.2);
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.request-header h3 {
+    margin: 0;
+    color: #c0ff01;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status.новая {
+    background-color: rgba(25, 118, 210, 0.2);
+    color: #64b5f6;
+    border: 1px solid #1976d2;
+}
+
+.status.в_обработке, .status.в_работе {
+    background-color: rgba(255, 143, 0, 0.2);
+    color: #ffb74d;
+    border: 1px solid #ff8f00;
+}
+
+.status.выполнена {
+    background-color: rgba(56, 142, 60, 0.2);
+    color: #81c784;
+    border: 1px solid #388e3c;
+}
+
+.status.отменена {
+    background-color: rgba(211, 47, 47, 0.2);
+    color: #e57373;
+    border: 1px solid #d32f2f;
+}
+
+.request-details p {
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
+
+.request-details p strong {
+    color: #c0ff01;
+}
+
+.technician-notes {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(32, 32, 32, 0.6);
+    border-radius: 10px;
+    border-left: 3px solid #c0ff01;
+}
+
+.loading, .error, .no-requests {
+    text-align: center;
+    padding: 20px;
+    background-color: #202020;
+    border-radius: 10px;
+    margin-top: 20px;
+    color: #e0e0e0;
+}
+
+.loading {
+    border-bottom: 3px solid #c0ff01;
+}
+
+.error {
+    color: #e57373;
+    border-left: 3px solid #d32f2f;
+}
+
+.no-requests {
+    color: #9e9e9e;
+    font-style: italic;
+    border: 1px dashed rgba(192, 255, 1, 0.3);
+}

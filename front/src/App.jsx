@@ -22,6 +22,9 @@ import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 import AdminServices from "./components/AdminServices";
 import AdminServiceOrders from "./components/AdminServiceOrders";
+import ResetPassword from "./pages/ResetPassword";
+import RequestPasswordReset from "./components/RequestPasswordReset";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const App = () => {
   return (
@@ -116,6 +119,10 @@ const App = () => {
               </AuthRequired>
             }
           />
+<Route path="/reset-password" element={<ResetPassword />} />
+<Route path="/request-reset" element={<RequestPasswordReset />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
         </Routes>
         <Footer />
       </BrowserRouter>

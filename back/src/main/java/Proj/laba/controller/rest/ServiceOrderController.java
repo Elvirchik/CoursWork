@@ -32,7 +32,7 @@ public class ServiceOrderController extends GenericController<ServiceOrder, Serv
     }
 
 
-@Operation(description = "Получить все заказы услуг пользователя")
+    @Operation(description = "Получить все заказы услуг пользователя")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ServiceOrderDTO>> getAllUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(serviceOrderService.getAllUserOrders(userId));
@@ -83,6 +83,7 @@ public class ServiceOrderController extends GenericController<ServiceOrder, Serv
         serviceOrderService.delete(orderId);
         return ResponseEntity.ok().build();
     }
+
     // Модифицированный метод getAllOrders с поддержкой фильтрации
     @Operation(description = "Получить все заявки на услуги с фильтрацией")
     @GetMapping("/all-simple")
@@ -98,4 +99,13 @@ public class ServiceOrderController extends GenericController<ServiceOrder, Serv
         return ResponseEntity.ok(orders);
     }
 
+    // Новый метод - обновить статус заявки
+    @Operation(description = "Обновить статус заявки на услугу")
+    @PutMapping("/{id}/status")
+    public ResponseEntity<ServiceOrderDTO> updateOrderStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        ServiceOrderDTO updatedOrder = serviceOrderService.updateOrderStatus(id, status);
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+    }
 }

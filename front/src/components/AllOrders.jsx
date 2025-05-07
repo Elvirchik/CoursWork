@@ -191,19 +191,43 @@ const AllOrders = () => {
     setCurrentPage(data.selected);
   };
 
-  // Функция для получения количества конкретного товара в заказе через таблицу order_products
-  const getProductQuantity = (order, productId) => {
-    // Проверяем, что order и orderProducts существуют и orderProducts - массив
-    if (order && order.orderProducts && Array.isArray(order.orderProducts)) {
-      // Ищем запись для данного товара в таблице order_products
-      const orderProduct = order.orderProducts.find(
-        (op) => op.productId === productId
-      );
-      // Возвращаем количество, если запись найдена, иначе 0
-      return orderProduct ? orderProduct.quantity : 0;
-    }
+  // Адаптированная функция getProductQuantity для новой структуры данных
+  // Адаптированная функция getProductQuantity для структуры данных с null productId
+const getProductQuantity = (order, productId) => {
+  if (!order || !order.products || !Array.isArray(order.products)) {
     return 0;
-  };
+  }
+
+  // Если у нас есть productsMap, используем его для быстрого поиска
+  if (order.productsMap && order.productsMap[productId]) {
+    // Найдем индекс продукта в массиве products
+    const productIndex = order.products.findIndex(p => p.id === productId);
+    if (productIndex >= 0 && order.orderProducts && productIndex < order.orderProducts.length) {
+      return order.orderProducts[productIndex].quantity;
+    }
+  }
+
+  // Если productsMap отсутствует или продукт не найден, ищем в массиве products
+  const productIndex = order.products.findIndex(p => p.id === productId);
+  if (productIndex >= 0 && order.orderProducts && productIndex < order.orderProducts.length) {
+    return order.orderProducts[productIndex].quantity;
+  }
+
+  // Если ничего не нашли, попробуем просто перебрать orderProducts
+  if (order.orderProducts && Array.isArray(order.orderProducts)) {
+    // Проверяем каждый элемент orderProducts
+    for (let i = 0; i < order.orderProducts.length; i++) {
+      // Если productId совпадает или null, проверяем соответствующий продукт
+      if (order.orderProducts[i].productId === productId || 
+          (order.orderProducts[i].productId === null && i < order.products.length && order.products[i].id === productId)) {
+        return order.orderProducts[i].quantity;
+      }
+    }
+  }
+
+  return 0; // Если продукт не найден, возвращаем 0
+};
+
 
   if (error) {
     return <div className="error-message">{error}</div>;
@@ -384,8 +408,7 @@ const AllOrders = () => {
                               <h4>{product.productName}</h4>
                               <div>
                                 <div>
-                                  Кол-во:{" "}
-                                  {getProductQuantity(order, product.id)}
+                                  Кол-во: {getProductQuantity(order, product.id)}
                                 </div>
                                 <div>{product.price} ₽</div>
                               </div>

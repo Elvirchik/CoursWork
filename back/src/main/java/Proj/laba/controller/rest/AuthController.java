@@ -1,3 +1,4 @@
+// File path: [back\src\main\java\Proj\laba\controller\rest\AuthController.java](file:///C:\Users\elfir\OneDrive\Рабочий стол\CoursWork-main\back\src\main\java\Proj\laba\controller\rest\AuthController.java)
 package Proj.laba.controller.rest;
 
 import Proj.laba.dto.*;
@@ -63,7 +64,7 @@ public class AuthController {
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(RegisterResponseDTO.builder()
                             .success(false)
-                            .message(e.getMessage())
+                            .message("Почта или пароль неверные")
                             .build());
         }
     }

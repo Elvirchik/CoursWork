@@ -48,4 +48,18 @@ public class UserController extends GenericController<User, UserDTO> {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @Operation(description = "Получить всех пользователей с пагинацией и фильтрацией")
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String roleTitle,
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<UserDTO> users = userService.listAllWithFilters(firstName, lastName, email, phone, roleTitle, pageable);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
 }

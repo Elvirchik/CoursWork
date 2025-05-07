@@ -1,12 +1,13 @@
+// File path: [front\src\components\Header.jsx](file:///C:\Users\elfir\OneDrive\Рабочий стол\CoursWork-main\front\src\components\Header.jsx)
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import "../style/Header.css";
 import logo from "../assets/img/logo.png";
 import { jwtDecode } from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { FiShoppingCart } from 'react-icons/fi';
-import { FaUser, FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+import { FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -20,8 +21,8 @@ const Header = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [userRole, setUserRole] = useState(null);
-    const [expanded, setExpanded] = useState(false); // State to control menu expansion
-    const navigate = useNavigate(); // Initialize useNavigate
+    const [expanded, setExpanded] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (cookies.jwtToken) {
@@ -42,26 +43,16 @@ const Header = () => {
     }, [cookies.jwtToken, removeCookie, setCookie]);
 
     useEffect(() => {
-        // Проверяем, залогинен ли пользователь
         if (isLoggedIn) {
-          // Устанавливаем таймер на 1 час (3600000 миллисекунд)
-          const timeoutId = setTimeout(() => {
-            // Вызываем функцию выхода
-            handleLogout();
-            // Перезагружаем страницу
-            window.location.reload();
-          }, 3600000);
-  
-          // Очищаем таймер при размонтировании компонента или при выходе пользователя
-          return () => clearTimeout(timeoutId);
-        }
-      }, [isLoggedIn]);
+            const timeoutId = setTimeout(() => {
+                handleLogout();
+                window.location.reload();
+            }, 3600000);
 
-    // Collapse the menu on route change
-    useEffect(() => {
-        setExpanded(false); // Collapse the menu
-    }, [navigate]);
-  
+            return () => clearTimeout(timeoutId);
+        }
+    }, [isLoggedIn]);
+
     const toggleAuthModal = () => {
         setIsAuthModalOpen(!isAuthModalOpen);
     };
@@ -106,8 +97,8 @@ const Header = () => {
                 setIsAuthModalOpen(false);
                 setIsLoggedIn(true);
             } else {
-                const errorData = await response.json();
-                setErrorMessage(errorData.message || 'Ошибка авторизации');
+                // Общее сообщение об ошибке для неверного email или пароля
+                setErrorMessage('Почта или пароль неверные');
             }
         } catch (error) {
             setErrorMessage('Ошибка сети');
@@ -215,22 +206,22 @@ const Header = () => {
   
     // Function to handle navigation and close the menu
     const handleNavClick = (route) => {
-        setExpanded(false); // Collapse the menu
-        navigate(route); // Navigate to the specified route
+        setExpanded(false);
+        navigate(route);
     };
 
     return (
         <header>
-            <Navbar bg="#191a1b" expand="lg" expanded={expanded}> {/* Control expansion with state */}
+            <Navbar bg="#191a1b" expand="lg" expanded={expanded}>
                 <Container>
-                    <Navbar.Brand as={Link} to="/"  onClick={() => handleNavClick("/")}> {/* Use handleNavClick */}
+                    <Navbar.Brand as={Link} to="/"  onClick={() => handleNavClick("/")}>
                         <img src={logo} alt="logo" />
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)}/>  {/* Toggle menu expansion */}
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)}/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto d-flex align-items-center ">
-                            <Nav.Link as={Link} to="/Catalog" className='text-white txt-up fw-bold' onClick={() => handleNavClick("/catalog")}>Каталог</Nav.Link> {/* Use handleNavClick */}
-                            <Nav.Link as={Link} to="/upgrade" className='text-white txt-up fw-bold' onClick={() => handleNavClick("/upgrade")}>Апгрейд</Nav.Link> {/* Use handleNavClick */}
+                            <Nav.Link as={Link} to="/Catalog" className='text-white txt-up fw-bold' onClick={() => handleNavClick("/catalog")}>Каталог</Nav.Link>
+                            <Nav.Link as={Link} to="/upgrade" className='text-white txt-up fw-bold' onClick={() => handleNavClick("/upgrade")}>Апгрейд</Nav.Link>
                              {isLoggedIn && userRole === 'ADMIN' && (
                                 <Nav.Link as={Link} to="/admin" onClick={() => handleNavClick("/admin")} className='text-white txt-up fw-bold'>
                                     Админ панель
@@ -238,10 +229,10 @@ const Header = () => {
                             )}
                         </Nav>
                         <Nav className='d-flex align-items-center'>
-                            <Nav.Link as={Link} to="/basket" onClick={() => handleNavClick("/basket")}> {/* Use handleNavClick */}
+                            <Nav.Link as={Link} to="/basket" onClick={() => handleNavClick("/basket")}>
                                 <FiShoppingCart className='imgheader' size={24} color="white" />
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/profile" onClick={() => handleNavClick("/profile")}> {/* Use handleNavClick */}
+                            <Nav.Link as={Link} to="/profile" onClick={() => handleNavClick("/profile")}>
                                 <FaUser className='imgheader' size={24} color="white" />
                             </Nav.Link>
                             {isLoggedIn ? (
@@ -282,8 +273,13 @@ const Header = () => {
                                     </span>
                                 </div>
                                 <button type="submit" className='vhod'>Войти</button>
+                                
+
                                 <span onClick={showRegisterForm} className='text-light'>Нет аккаунта? <span
                                     className='text-cislota'>Зарегистрируйтесь</span></span>
+                                    <div className="forgot-password">
+    <Link to="/forgot-password" onClick={toggleAuthModal} className='text-cislota'>Забыли пароль?</Link>
+</div>
                             </form>
                         ) : (
                             <form className="auth-form d-flex flex-column" id="registerForm"

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from 'jwt-decode';
 import '../style/Orders.css';
+import '../style/Catalog.css'
 import GPU from '../assets/img/Videocard.png';
 import CPU from '../assets/img/CPU.png';
 import RAM from '../assets/img/RAM.png';

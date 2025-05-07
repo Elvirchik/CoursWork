@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import "../style/Admin.css";
@@ -9,7 +9,6 @@ import LoadingIndicator from "../components/LoadingIndicator";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
-  const [allUsers, setAllUsers] = useState([]); // Сохраняем все пользователи для фильтрации
   const [error, setError] = useState(null);
   const [editUserId, setEditUserId] = useState(null);
   const [editedUser, setEditedUser] = useState({
@@ -63,18 +62,37 @@ const Admin = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `http://localhost:8080/users/getAll?page=0&size=1000`
-      ); // Получаем все пользователи для фильтрации
+      let url;
+      
+      // Проверяем, есть ли активные фильтры
+      const hasFilters = firstNameSearch || lastNameSearch || emailSearch || phoneSearch || roleFilter;
+      
+      if (hasFilters) {
+        // Используем endpoint search с параметрами фильтрации
+        url = `http://localhost:8080/users/search?page=${currentPage}&size=${USERS_PER_PAGE}`;
+        if (firstNameSearch) url += `&firstName=${encodeURIComponent(firstNameSearch)}`;
+        if (lastNameSearch) url += `&lastName=${encodeURIComponent(lastNameSearch)}`;
+        if (emailSearch) url += `&email=${encodeURIComponent(emailSearch)}`;
+        if (phoneSearch) url += `&phone=${encodeURIComponent(phoneSearch)}`;
+        if (roleFilter) url += `&roleTitle=${encodeURIComponent(roleFilter)}`;
+      } else {
+        // Если фильтров нет, используем обычный endpoint getAll
+        url = `http://localhost:8080/users/getAll?page=${currentPage}&size=${USERS_PER_PAGE}`;
+      }
+  
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      
       // Фильтруем, чтобы не показывать текущего пользователя
       const filteredUsers = data.content.filter(
         (user) => user.id !== currentUserId
       );
-      setAllUsers(filteredUsers);
+      
+      setUsers(filteredUsers);
+      setPageCount(data.totalPages);
       setIsLoading(false);
     } catch (e) {
       setError("Ошибка при загрузке пользователей");
@@ -82,6 +100,7 @@ const Admin = () => {
       setIsLoading(false);
     }
   };
+  
 
   const fetchRoles = async () => {
     try {
@@ -99,68 +118,24 @@ const Admin = () => {
 
   useEffect(() => {
     if (currentUserId) {
-      fetchUsers();
       fetchRoles();
     }
   }, [currentUserId]);
 
-  // Функция для фильтрации пользователей
-  const filterUsers = useCallback(() => {
-    if (!allUsers.length) return;
-
-    let filtered = [...allUsers];
-
-    // Фильтрация по имени
-    if (firstNameSearch) {
-      filtered = filtered.filter((user) =>
-        user.firstName.toLowerCase().includes(firstNameSearch.toLowerCase())
-      );
+  // Загрузка пользователей при изменении параметров фильтрации или страницы
+  useEffect(() => {
+    if (currentUserId) {
+      fetchUsers();
     }
-
-    // Фильтрация по фамилии
-    if (lastNameSearch) {
-      filtered = filtered.filter((user) =>
-        user.lastName.toLowerCase().includes(lastNameSearch.toLowerCase())
-      );
-    }
-
-    // Фильтрация по email
-    if (emailSearch) {
-      filtered = filtered.filter((user) =>
-        user.email.toLowerCase().includes(emailSearch.toLowerCase())
-      );
-    }
-
-    // Фильтрация по телефону
-    if (phoneSearch) {
-      filtered = filtered.filter((user) => user.phone.includes(phoneSearch));
-    }
-
-    // Фильтрация по роли
-    if (roleFilter) {
-      filtered = filtered.filter((user) => user.role.title === roleFilter);
-    }
-
-    // Пагинация на стороне клиента
-    const offset = currentPage * USERS_PER_PAGE;
-    const currentPageData = filtered.slice(offset, offset + USERS_PER_PAGE);
-
-    setUsers(currentPageData);
-    setPageCount(Math.ceil(filtered.length / USERS_PER_PAGE));
   }, [
-    allUsers,
+    currentPage,
     firstNameSearch,
     lastNameSearch,
     emailSearch,
     phoneSearch,
     roleFilter,
-    currentPage,
-    USERS_PER_PAGE,
+    currentUserId
   ]);
-
-  useEffect(() => {
-    filterUsers();
-  }, [filterUsers]);
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -196,8 +171,8 @@ const Admin = () => {
         }
       );
       if (response.ok) {
-        setAllUsers(allUsers.filter((user) => user.id !== userToDelete.id));
-        filterUsers(); // Обновляем отфильтрованный список
+        // После успешного удаления просто обновляем список пользователей
+        fetchUsers();
         setShowDeleteConfirm(false);
         setUserToDelete(null);
       } else {
@@ -253,21 +228,8 @@ const Admin = () => {
       );
 
       if (response.ok) {
-        // Обновляем пользователя в списке всех пользователей
-        const updatedAllUsers = allUsers.map((user) =>
-          user.id === editUserId
-            ? {
-                ...user,
-                firstName: editedUser.firstName,
-                lastName: editedUser.lastName,
-                email: editedUser.email,
-                phone: editedUser.phone,
-                role: selectedRole,
-              }
-            : user
-        );
-        setAllUsers(updatedAllUsers);
-        filterUsers(); // Обновляем отфильтрованный список
+        // После успешного обновления просто перезагружаем список пользователей
+        fetchUsers();
         setEditUserId(null);
         setError(null);
       } else {

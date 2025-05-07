@@ -61,7 +61,8 @@ function Upgrade() {
                 },
                 body: JSON.stringify({
                     price: parseFloat(budget), // Преобразуем строку в число
-                    comment: comment
+                    comment: comment,
+                    status: "Ожидает обработки" // Добавляем статус по умолчанию
                 })
             });
     

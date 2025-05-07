@@ -60,6 +60,19 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
         serviceOrder.setComment(dto.getComment());
         serviceOrder.setCreatedWhen(LocalDateTime.now());
 
+        // Установка даты заказа - используем текущую дату, если не указана
+        if (dto.getOrderDate() != null) {
+            serviceOrder.setOrderDate(dto.getOrderDate());
+        } else {
+            serviceOrder.setOrderDate(LocalDate.now());
+        }
+
+        // Установка статуса "В обработке"
+        serviceOrder.setStatus("В обработке");
+
+        // Устанавливаем флаг deleted = false
+        serviceOrder.setDeleted(false);
+
         ServiceOrder savedOrder = serviceOrderRepository.save(serviceOrder);
         return serviceOrderMapper.toDTO(savedOrder);
     }
@@ -89,6 +102,21 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
             order.setComment(dto.getComment());
         }
 
+        // Обновляем также статус, если он передан
+        if (dto.getStatus() != null) {
+            order.setStatus(dto.getStatus());
+        }
+
+        ServiceOrder updatedOrder = serviceOrderRepository.save(order);
+        return serviceOrderMapper.toDTO(updatedOrder);
+    }
+
+    // Новый метод - обновить статус заявки
+    public ServiceOrderDTO updateOrderStatus(Long id, String status) {
+        ServiceOrder order = serviceOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Заявка не найдена"));
+
+        order.setStatus(status);
         ServiceOrder updatedOrder = serviceOrderRepository.save(order);
         return serviceOrderMapper.toDTO(updatedOrder);
     }
@@ -104,6 +132,7 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
 
         serviceOrderRepository.save(order);
     }
+
     public Page<ServiceOrderDTO> getAllOrdersWithFilters(
             String firstName, String lastName, Long serviceId, LocalDate createdDate, Pageable pageable) {
 
@@ -144,5 +173,4 @@ public class ServiceOrderService extends GenericService<ServiceOrder, ServiceOrd
         Page<ServiceOrder> orderPage = serviceOrderRepository.findAll(spec, pageable);
         return orderPage.map(serviceOrderMapper::toDTO);
     }
-
 }

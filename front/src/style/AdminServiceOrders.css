@@ -1,264 +1,297 @@
 .admin-service-orders {
-    padding: 20px 0;
-    min-height: 100vh;
+  background-color: #111;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
 }
 
-.admin-service-orders h2 {
-    color: #fff;
-    margin-bottom: 20px;
-    text-align: center;
+.admin_button {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.Link, .Link_activ {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.Link {
+  background-color: #333;
+  color: #c0ff01;
+}
+
+.Link:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+}
+
+.Link_activ {
+  background-color: #c0ff01;
+  color: #111;
+}
+
+.filters-panel {
+  background-color: #222;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.filters-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #c0ff01;
+  font-weight: bold;
+}
+
+.filter-input, .filter-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: #fff;
+}
+
+.filter-input:focus, .filter-select:focus {
+  border-color: #c0ff01;
+  outline: none;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-filter {
+  background-color: #333;
+  color: #c0ff01;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-filter:hover {
+  background-color: #444;
+}
+
+.btn-secondary {
+  background-color: #555;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-secondary:hover {
+  background-color: #666;
+}
+
+.btn-success {
+  background-color: #2d7d4d;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #359458;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.9em;
 }
 
 .service-orders-table-container {
-    overflow-x: auto;
-    margin-bottom: 20px;
+  overflow-x: auto;
+  margin-bottom: 20px;
 }
 
 .service-orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: #fff;
-}
-
-.service-orders-table th,
-.service-orders-table td {
-    padding: 12px 15px;
-    border: 1px solid #444;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .service-orders-table th {
-    background-color: #333;
-    font-weight: bold;
-    text-align: left;
+  background-color: #222;
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 2px solid #c0ff01;
+  color: #c0ff01;
+  font-weight: bold;
 }
 
-.service-orders-table tbody tr {
-    background-color: #222;
+.service-orders-table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #333;
 }
 
-.service-orders-table tbody tr:hover {
-    background-color: #2a2a2a;
+.service-order-row:hover {
+  background-color: #222;
 }
 
-.service-order-row td {
-    vertical-align: middle;
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: #333;
+  color: #fff;
+  border: none;
 }
 
-.action-buttons button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 2px;
+.status-select {
+  cursor: pointer;
 }
 
-.edit-btn-orders,
-.delete-btn-orders {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px;
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn-orders, .delete-btn-orders {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .edit-btn-orders {
-    color: #4a9af5;
+  background-color: #2d7d4d;
+  color: white;
 }
 
 .edit-btn-orders:hover {
-    color: #2a7aca;
+  background-color: #359458;
 }
 
 .delete-btn-orders {
-    color: #f54a4a;
+  background-color: #c50505;
+  color: white;
 }
 
 .delete-btn-orders:hover {
-    color: #ca2a2a;
+  background-color: #e01616;
 }
 
-.edit-input {
-    width: 100px;
-    padding: 6px;
-    background-color: #333;
-    border: 1px solid #555;
-    color: #fff;
+.edit-input, .edit-textarea, .edit-select {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: #333;
+  border: 1px solid #555;
+  color: #fff;
 }
 
 .edit-textarea {
-    width: 100%;
-    min-width: 150px;
-    height: 60px;
-    padding: 6px;
-    background-color: #333;
-    border: 1px solid #555;
-    color: #fff;
-    resize: vertical;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.comment-cell {
+  max-width: 200px;
+}
+
+.comment-content {
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 80px;
 }
 
 .no-orders {
-    text-align: center;
-    color: #888;
-    padding: 30px 0;
-    font-size: 18px;
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2em;
+  color: #888;
 }
 
-/* Стили для пагинации */
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    margin: 20px 0;
-    padding: 0;
-    gap: 5px;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 0;
+  gap: 5px;
 }
 
 .page-num {
-    color: #fff;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: #333;
-    display: inline-block;
-    text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #333;
+  color: #fff;
+  text-decoration: none;
 }
 
 .page-num:hover {
-    background-color: #444;
+  background-color: #444;
 }
 
-.active {
-    /* background-color: #4a9af5; */
-    color: #fff;
+.active_orders {
+  background-color: #c0ff01;
+  color: #111;
 }
-.comment-cell {
-    max-width: 250px;
-    min-width: 150px;
-  }
-  
-  .comment-content {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    max-height: none;
-  }
-  
-  .edit-textarea {
-    width: 100%;
-    min-height: 80px;
-    resize: vertical;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-  }
 
-  /* фильтры */
-  /* Стили для фильтров */
-.filters-panel {
-    background-color: #111;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
+.error-message {
+  background-color: rgba(197, 5, 5, 0.1);
+  border: 1px solid #c50505;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  color: #ff6b6b;
+}
+
+.filter-toggle {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
   .filters-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-end;
+    flex-direction: column;
   }
   
   .filter-group {
-    flex: 1;
-    min-width: 200px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .filter-group option {
-    background-color: #111;
-    border: 1px solid #c0ff01;
-    color: #fff;
-  }
-
-  .filter-group select {
-    background-color: #111;
-    color: #fff;
-  }
-  
-  .filter-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .filter-input, .filter-select {
-    padding: 8px;
-    border: 1px solid #c0ff01;
-    border-radius: 4px;
     width: 100%;
   }
   
-  .filter-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  .action-buttons {
+    flex-direction: column;
   }
   
-  .btn-filter {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
+  .admin_button {
+    flex-direction: column;
   }
-  
-  .btn-filter:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .filter-toggle {
-    margin-bottom: 15px;
-  }
-  
-  .btn-primary {
-    background-color: #c0ff01;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .btn-secondary {
-    background-color: #c0ff01;
-    color: #111;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0069d9;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-  
-  @media (max-width: 768px) {
-    .filters-form {
-      flex-direction: column;
-    }
-    
-    .filter-group {
-      width: 100%;
-    }
-  }
-  
+}
