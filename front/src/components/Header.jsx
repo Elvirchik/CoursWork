@@ -1,4 +1,3 @@
-// File path: [front\src\components\Header.jsx](file:///C:\Users\elfir\OneDrive\Рабочий стол\CoursWork-main\front\src\components\Header.jsx)
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Nav } from 'react-bootstrap';
@@ -42,16 +41,29 @@ const Header = () => {
         }
     }, [cookies.jwtToken, removeCookie, setCookie]);
 
+    // Новая функция для обновления токена
+    const refreshToken = useCallback(async () => {
+        try {
+            if (cookies.jwtToken) {
+                // Обновляем куки с тем же токеном, но обновляем срок действия
+                setCookie('jwtToken', cookies.jwtToken, { path: '/', maxAge: 3600 });
+            }
+        } catch (error) {
+            console.error('Ошибка при обновлении токена:', error);
+        }
+    }, [cookies.jwtToken, setCookie]);
+
+    // Эффект для периодического обновления токена
     useEffect(() => {
         if (isLoggedIn) {
-            const timeoutId = setTimeout(() => {
-                handleLogout();
-                window.location.reload();
-            }, 3600000);
+            // Обновляем токен каждые 25 минут (1500000 мс)
+            const refreshInterval = setInterval(() => {
+                refreshToken();
+            }, 1500000);
 
-            return () => clearTimeout(timeoutId);
+            return () => clearInterval(refreshInterval);
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, refreshToken]);
 
     const toggleAuthModal = () => {
         setIsAuthModalOpen(!isAuthModalOpen);
@@ -84,7 +96,8 @@ const Header = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                setCookie('jwtToken', data.token, { path: '/', maxAge: 1800 });
+                // Устанавливаем куки на 1 час (3600 секунд)
+                setCookie('jwtToken', data.token, { path: '/', maxAge: 3600 });
 
                 try {
                     const decodedToken = jwtDecode(data.token);

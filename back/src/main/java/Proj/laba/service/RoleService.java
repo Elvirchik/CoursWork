@@ -3,8 +3,8 @@ package Proj.laba.service;
 import Proj.laba.dto.RoleDTO;
 import Proj.laba.mapper.GenericMapper;
 import Proj.laba.model.Role;
-import Proj.laba.reposirory.GenericRepository;
-import Proj.laba.reposirory.RoleRepository;
+import Proj.laba.repository.GenericRepository;
+import Proj.laba.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
 @Service

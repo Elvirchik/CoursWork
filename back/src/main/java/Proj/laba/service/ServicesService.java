@@ -3,7 +3,7 @@ package Proj.laba.service;
 import Proj.laba.dto.ServicesDTO;
 import Proj.laba.mapper.ServicesMapper;
 import Proj.laba.model.Services;
-import Proj.laba.reposirory.ServicesRepository;
+import Proj.laba.repository.ServicesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

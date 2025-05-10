@@ -3,7 +3,7 @@ package Proj.laba.service;
 import Proj.laba.dto.ProductDTO;
 import Proj.laba.mapper.ProductMapper;
 import Proj.laba.model.Product;
-import Proj.laba.reposirory.ProductRepository;
+import Proj.laba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -25,6 +25,7 @@ import AdminServiceOrders from "./components/AdminServiceOrders";
 import ResetPassword from "./pages/ResetPassword";
 import RequestPasswordReset from "./components/RequestPasswordReset";
 import ForgotPassword from "./pages/ForgotPassword";
+import ProductDetail from "./components/ProductDetail";
 
 const App = () => {
   return (
@@ -122,7 +123,7 @@ const App = () => {
 <Route path="/reset-password" element={<ResetPassword />} />
 <Route path="/request-reset" element={<RequestPasswordReset />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
+            <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

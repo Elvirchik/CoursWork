@@ -20,8 +20,20 @@ const EditProduct = () => {
         videoCard: '',
         processor: '',
         ram: '',
-        storage: ''
+        storage: '',
+        cpufull: '',
+        gpufull: '',
+        ramfull: '',
+        romfull: '',
+        powerfull: '',
+        casefull: '',
+        coolingCpu: ''
     });
+    
+    const [mainImage, setMainImage] = useState(null);
+    const [additionalImages, setAdditionalImages] = useState([]);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [additionalImagePreviews, setAdditionalImagePreviews] = useState([]);
 
     // Загрузка данных товара при монтировании компонента
     useEffect(() => {
@@ -48,6 +60,13 @@ const EditProduct = () => {
                     processor: data.processor,
                     ram: data.ram,
                     storage: data.storage,
+                    cpufull: data.cpufull || '',
+                    gpufull: data.gpufull || '',
+                    ramfull: data.ramfull || '',
+                    romfull: data.romfull || '',
+                    powerfull: data.powerfull || '',
+                    casefull: data.casefull || '',
+                    coolingCpu: data.coolingCpu || ''
                 });
                 
                 setLoading(false);
@@ -69,28 +88,95 @@ const EditProduct = () => {
         });
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setMainImage(file);
+            
+            // Создание предпросмотра изображения
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleAdditionalImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        setAdditionalImages([...additionalImages, ...files]);
+        
+        // Создание предпросмотров для новых дополнительных изображений
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAdditionalImagePreviews(prevPreviews => [...prevPreviews, reader.result]);
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // Функция для удаления основного изображения
+    const handleRemoveMainImage = () => {
+        setMainImage(null);
+        setImagePreview(null);
+        // Сбросить значение input file
+        document.getElementById('image').value = '';
+    };
+
+    // Функция для удаления дополнительного изображения по индексу
+    const handleRemoveAdditionalImage = (index) => {
+        const newImages = [...additionalImages];
+        newImages.splice(index, 1);
+        setAdditionalImages(newImages);
+
+        const newPreviews = [...additionalImagePreviews];
+        newPreviews.splice(index, 1);
+        setAdditionalImagePreviews(newPreviews);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            const response = await fetch(`http://localhost:8080/products/update?id=${id}`, {
+            // Используем FormData для отправки multipart/form-data
+            const form = new FormData();
+            form.append('id', id);
+            form.append('productName', formData.productName);
+            form.append('price', formData.price);
+            form.append('videoCard', formData.videoCard);
+            form.append('processor', formData.processor);
+            form.append('ram', formData.ram);
+            form.append('storage', formData.storage);
+            form.append('cpufull', formData.cpufull);
+            form.append('gpufull', formData.gpufull);
+            form.append('ramfull', formData.ramfull);
+            form.append('romfull', formData.romfull);
+            form.append('powerfull', formData.powerfull);
+            form.append('casefull', formData.casefull);
+            form.append('coolingCpu', formData.coolingCpu);
+            
+            // Добавляем изображение только если оно было изменено
+            if (mainImage) {
+                form.append('image', mainImage);
+            }
+            
+            // Добавляем дополнительные изображения если они есть
+            if (additionalImages.length > 0) {
+                additionalImages.forEach(image => {
+                    form.append('additionalImages', image);
+                });
+            }
+
+            const response = await fetch(`http://localhost:8080/products/update-with-image`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${cookies.jwtToken}`,
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${cookies.jwtToken}`
+                    // Не устанавливаем Content-Type, браузер автоматически установит его с boundary для FormData
                 },
-                body: JSON.stringify({
-                    id: parseInt(id),
-                    productName: formData.productName,
-                    price: formData.price,
-                    videoCard: formData.videoCard,
-                    processor: formData.processor,
-                    ram: formData.ram,
-                    storage: formData.storage,
-                    image: product.image // Сохраняем текущее изображение
-                })
+                body: form
             });
 
             if (!response.ok) {
@@ -107,6 +193,19 @@ const EditProduct = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Добавить все дополнительные изображения
+    const addAllImages = (e) => {
+        const fileInput = document.getElementById('additionalImages');
+        fileInput.click();
+    };
+
+    // Очистить все дополнительные изображения
+    const clearAllAdditionalImages = () => {
+        setAdditionalImages([]);
+        setAdditionalImagePreviews([]);
+        document.getElementById('additionalImages').value = '';
     };
 
     if (loading && !product) return <LoadingIndicator />;
@@ -131,7 +230,7 @@ const EditProduct = () => {
             {loading ? (
                 <LoadingIndicator />
             ) : (
-                <form onSubmit={handleSubmit} className="product-form">
+                <form onSubmit={handleSubmit} className="product-form" encType="multipart/form-data">
                     <div className="form-group">
                         <label htmlFor="productName">Название товара</label>
                         <input
@@ -206,9 +305,131 @@ const EditProduct = () => {
                         />
                     </div>
                     
-                
+                    <h3>Подробные характеристики</h3>
                     
-                    {product.image && (
+                    <div className="form-group">
+                        <label htmlFor="cpufull">Процессор (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="cpufull"
+                            name="cpufull"
+                            value={formData.cpufull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="coolingCpu">Охлаждение процессора</label>
+                        <input
+                            type="text"
+                            required
+                            id="coolingCpu"
+                            name="coolingCpu"
+                            value={formData.coolingCpu}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="gpufull">Видеокарта (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="gpufull"
+                            name="gpufull"
+                            value={formData.gpufull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="ramfull">Оперативная память (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="ramfull"
+                            name="ramfull"
+                            value={formData.ramfull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="romfull">Накопитель (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="romfull"
+                            name="romfull"
+                            value={formData.romfull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="powerfull">Блок питания (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="powerfull"
+                            name="powerfull"
+                            value={formData.powerfull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="casefull">Корпус (подробно)</label>
+                        <input
+                            type="text"
+                            required
+                            id="casefull"
+                            name="casefull"
+                            value={formData.casefull}
+                            onChange={handleChange}
+                            rows="3"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="image">Основное изображение товара</label>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            onChange={handleImageChange}
+                            accept="image/*"
+                            className="file-input"
+                        />
+                        <div className="image-tip">Загрузите новое изображение только если хотите заменить текущее</div>
+                    </div>
+
+                    {imagePreview ? (
+                        <div className="form-group image-preview">
+                            <label>Новое изображение (предпросмотр)</label>
+                            <div className="image-preview-container">
+                                <img 
+                                    src={imagePreview} 
+                                    alt="Предпросмотр" 
+                                    className="product-image-preview"
+                                />
+                                <button 
+                                    type="button" 
+                                    className="remove-image-btn" 
+                                    onClick={handleRemoveMainImage}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    ) : product.image && (
                         <div className="form-group image-preview">
                             <label>Текущее изображение</label>
                             <img 
@@ -216,8 +437,86 @@ const EditProduct = () => {
                                 alt={product.productName} 
                                 className="product-image-preview"
                             />
-                            <div className="image-notice">
-                                Изображение нельзя изменить при редактировании
+                        </div>
+                    )}
+                    
+                    <div className="form-group">
+                        <label htmlFor="additionalImages">Дополнительные изображения</label>
+                        <div className="additional-images-actions">
+                            <input
+                                type="file"
+                                id="additionalImages"
+                                name="additionalImages"
+                                onChange={handleAdditionalImagesChange}
+                                accept="image/*"
+                                multiple
+                                className="file-input"
+                                style={{ display: 'none' }}
+                            />
+                            <button 
+                                type="button" 
+                                className="add-images-btn" 
+                                onClick={addAllImages}
+                            >
+                                Добавить изображения
+                            </button>
+                            {additionalImages.length > 0 && (
+                                <button 
+                                    type="button" 
+                                    className="clear-images-btn" 
+                                    onClick={clearAllAdditionalImages}
+                                >
+                                    Очистить все
+                                </button>
+                            )}
+                        </div>
+                        <div className="image-tip">
+                            Для добавления новых фото нажмите "Добавить изображения". Можно выбрать несколько файлов одновременно.
+                        </div>
+                        <div className="image-tip">
+                            Загруженные изображения заменят существующие дополнительные фото.
+                        </div>
+                    </div>
+                    
+                    {additionalImagePreviews.length > 0 && (
+                        <div className="form-group additional-images-preview">
+                            <label>Новые дополнительные изображения ({additionalImagePreviews.length})</label>
+                            <div className="additional-images-container">
+                                {additionalImagePreviews.map((preview, index) => (
+                                    <div key={index} className="additional-image-wrapper">
+                                        <img 
+                                            src={preview} 
+                                            alt={`Дополнительное изображение ${index + 1}`} 
+                                            className="additional-image-preview"
+                                        />
+                                        <button 
+                                            type="button" 
+                                            className="remove-image-btn" 
+                                            onClick={() => handleRemoveAdditionalImage(index)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {product.additionalImages && product.additionalImages.length > 0 && (
+                        <div className="form-group additional-images-preview">
+                            <label>Текущие дополнительные изображения ({product.additionalImages.length})</label>
+                            <div className="additional-images-container">
+                                {product.additionalImages.map((image, index) => (
+                                    <img 
+                                        key={index}
+                                        src={`data:image/png;base64, ${image}`} 
+                                        alt={`Дополнительное изображение ${index + 1}`} 
+                                        className="additional-image-preview"
+                                    />
+                                ))}
+                            </div>
+                            <div className="image-tip warning">
+                                Внимание: при загрузке новых дополнительных изображений, текущие будут заменены!
                             </div>
                         </div>
                     )}

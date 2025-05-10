@@ -3,13 +3,14 @@ package Proj.laba.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,8 +43,14 @@ public class Product extends GenericModel {
 
     @Lob
     @Column(name = "image")
-    @Schema(description = "Изображение продукта")
+    @Schema(description = "Основное изображение продукта")
     private byte[] image;
+
+    @Lob
+    @Column(name = "additional_images", columnDefinition = "TEXT")
+    @Convert(converter = ImageListConverter.class)
+    @Schema(description = "Дополнительные изображения продукта")
+    private List<byte[]> additionalImages = new ArrayList<>();
 
     @Schema(description = "Видеокарта")
     @Column(name = "video_card")
@@ -61,10 +68,33 @@ public class Product extends GenericModel {
     @Column(name = "storage")
     private String storage;
 
-    @Schema(description = "Количество товара на складе")
-    @Column(name = "stock_quantity")
-    private Integer stockQuantity;
+    // Новые поля с подробными характеристиками
+    @Schema(description = "Подробная информация о процессоре")
+    @Column(name = "cpu_full")
+    private String cpufull;
 
+    @Schema(description = "Подробная информация о видеокарте")
+    @Column(name = "gpu_full")
+    private String gpufull;
 
+    @Schema(description = "Подробная информация об оперативной памяти")
+    @Column(name = "ram_full")
+    private String ramfull;
+
+    @Schema(description = "Подробная информация о накопителе")
+    @Column(name = "rom_full")
+    private String romfull;
+
+    @Schema(description = "Подробная информация о блоке питания")
+    @Column(name = "power_full")
+    private String powerfull;
+
+    @Schema(description = "Подробная информация о корпусе")
+    @Column(name = "case_full")
+    private String casefull;
+
+    @Schema(description = "Подробная информация об охлаждении процессора")
+    @Column(name = "cooling_cpu")
+    private String coolingCpu;
 
 }

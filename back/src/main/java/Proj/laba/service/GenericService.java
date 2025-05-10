@@ -3,7 +3,7 @@ package Proj.laba.service;
 import Proj.laba.dto.GenericDTO;
 import Proj.laba.mapper.GenericMapper;
 import Proj.laba.model.GenericModel;
-import Proj.laba.reposirory.GenericRepository;
+import Proj.laba.repository.GenericRepository;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 

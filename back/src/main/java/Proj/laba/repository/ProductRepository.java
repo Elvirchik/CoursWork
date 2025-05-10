@@ -1,4 +1,4 @@
-package Proj.laba.reposirory;
+package Proj.laba.repository;
 
 import Proj.laba.model.Product;
 import org.springframework.data.jpa.repository.Modifying;

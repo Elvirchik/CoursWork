@@ -1,7 +1,7 @@
 package Proj.laba.security;
 
 import Proj.laba.model.User;
-import Proj.laba.reposirory.UserRepository;
+import Proj.laba.repository.UserRepository;
 import Proj.laba.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

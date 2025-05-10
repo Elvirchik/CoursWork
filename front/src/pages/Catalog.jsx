@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import '../style/Catalog.css';
 import GPU from '../assets/img/Videocard.png';
 import CPU from '../assets/img/CPU.png';
@@ -9,6 +10,7 @@ import ROM from '../assets/img/ROM.png';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 function Catalog() {
+    const navigate = useNavigate();
     const [computers, setComputers] = useState([]);
     const [userId, setUserId] = useState(null);
     const [error, setError] = useState(null);
@@ -99,7 +101,9 @@ function Catalog() {
         fetchComputers(false); // Немедленно обновляем каталог без фильтров
     };
 
-    const addToCart = async (productId) => {
+    const addToCart = async (e, productId) => {
+        e.stopPropagation(); // Предотвращаем переход на страницу товара при нажатии на кнопку "В корзину"
+        
         if (!userId) {
             setError('Необходимо войти для добавления товара в корзину.');
             return;
@@ -132,6 +136,11 @@ function Catalog() {
             console.error('Ошибка сети:', error);
             setError('Ошибка сети при добавлении товара в корзину.');
         }
+    };
+
+    // Функция для перехода на страницу товара
+    const navigateToProduct = (productId) => {
+        navigate(`/product/${productId}`);
     };
 
     return (
@@ -244,7 +253,12 @@ function Catalog() {
                     <div className="tovari">
                         {computers.length > 0 ? (
                             computers.map((computer) => (
-                                <div className="card_tovara" key={computer.id}>
+                                <div 
+                                    className="card_tovara" 
+                                    key={computer.id} 
+                                    onClick={() => navigateToProduct(computer.id)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     {computer.image ? (
                                         <img
                                             src={`data:image/png;base64, ${computer.image}`}
@@ -258,7 +272,10 @@ function Catalog() {
                                         <h4>{computer.productName}</h4>
                                         <div>
                                             <div>{computer.price} ₽</div>
-                                            <button className="buy" onClick={() => addToCart(computer.id)}>
+                                            <button 
+                                                className="buy" 
+                                                onClick={(e) => addToCart(e, computer.id)}
+                                            >
                                                 В корзину
                                             </button>
                                         </div>

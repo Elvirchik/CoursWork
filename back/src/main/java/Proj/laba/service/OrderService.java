@@ -9,9 +9,9 @@ import Proj.laba.model.Order;
 import Proj.laba.model.Product;
 import Proj.laba.model.User;
 import Proj.laba.model.OrderProducts;
-import Proj.laba.reposirory.OrderRepository;
-import Proj.laba.reposirory.ProductRepository;
-import Proj.laba.reposirory.UserRepository;
+import Proj.laba.repository.OrderRepository;
+import Proj.laba.repository.ProductRepository;
+import Proj.laba.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,11 +30,9 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 @Service
 public class OrderService extends GenericService<Order, OrderDTO> {

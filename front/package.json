@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@pbe/react-yandex-maps": "^1.2.5",
-    "axios": "^1.7.9",
+    "axios": "^1.9.0",
     "bootstrap": "^5.3.3",
     "jwt-decode": "^4.0.0",
     "mobx": "^6.13.5",
@@ -23,7 +23,9 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
     "react-paginate": "^8.3.0",
-    "react-router-dom": "^7.3.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^7.6.0",
+    "react-toastify": "^11.0.5",
     "react-yandex-map": "^4.6.0"
   },
   "devDependencies": {

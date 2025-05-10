@@ -1,4 +1,4 @@
-package Proj.laba.reposirory;
+package Proj.laba.repository;
 
 import Proj.laba.model.Cart;
 import org.springframework.stereotype.Repository;

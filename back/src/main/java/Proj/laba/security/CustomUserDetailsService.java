@@ -1,7 +1,7 @@
 package Proj.laba.security;
 
 import Proj.laba.model.User;
-import Proj.laba.reposirory.UserRepository;
+import Proj.laba.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
